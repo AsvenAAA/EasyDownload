@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="1.	CheckDownloadFile – делает запрос на сервер, если получает нужный ответ, то переходит к загрузке, если ответ относится к ошибкам, то выдает исключение с сообщением об ошибке.&#xD;&#xA;2.	DownloadFile – загружает файл, если во время загрузки произошла ошибка, то выдает исключение с сообщением об ошибке. Записывает начало и конец загрузки. Будет перегружаемым, чтобы мог начать новую загрузку, либо продолжить ту, что не окончена.&#xD;&#xA;3.	DownloadOK – сообщает о завершении загрузки звуковым сигналом.&#xD;&#xA;4.	GiveTimeSpent – показывает затраченное время на загрузку.&#xD;&#xA;5.	StateKeeper – сохраняет состояние загрузки.&#xD;&#xA;6.	CheckDownloadState – проверяет, есть ли не завершенные загрузки, если есть, должен взять и передать DownloadState методу DownloadFile.&#xD;&#xA;">
+    <Position X="0.5" Y="3.687" Height="2.333" Width="4.304" />
+  </Comment>
+  <Class Name="EasyDownload.Downloader">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgACAASAAAAAAICBggAQIAAAAAAAAAAA=</HashCode>
+      <FileName>Downloader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="EasyDownload.DirectoryManager">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAACCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DirectoryManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EasyDownload.History">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>History.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
