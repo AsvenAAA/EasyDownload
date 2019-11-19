@@ -20,6 +20,8 @@ namespace EasyDownload
 
         public string DownloadState { get; set; }
 
+        public long FileSize { get; set; }
+
         public async Task<HttpResponseMessage> CheckDownloadFile()
         {
             //HttpClient httpClient = new HttpClient();
@@ -27,8 +29,6 @@ namespace EasyDownload
             //HttpResponseMessage response = await httpClient.GetAsync(uri);
             HttpResponseMessage response = new HttpResponseMessage();
             return response?.EnsureSuccessStatusCode();
-
- 
         }
 
         public async Task DownloadFile()
@@ -48,16 +48,21 @@ namespace EasyDownload
             //WebClient download = new WebClient();
             //download.DownloadFileAsync(uri, @"C:\Users\Asven\Desktop\CentOS-8-x86_64-1905-boot.iso");
 
-            HttpClient client = new HttpClient();
-            Uri uri = new Uri(URI);
-            HttpResponseMessage response = await client.GetAsync(uri);
-            using (FileStream fileSave = File.Create(@"C:\Users\Asven\Desktop\CentOS-8-x86_64-1905-boot.iso"))
+            using (HttpClient client = new HttpClient())
             {
-                await response.Content.CopyToAsync(fileSave);
-                fileSave.Close();
+                byte[] buffer = new byte[4096];
+                
+                Uri uri = new Uri(URI);
+                HttpResponseMessage response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+                var fileSize = response.Content.Headers.ContentLength;
+                using (FileStream fileSave = File.Create(@"C:\Users\Asven\Desktop\CentOS-8-x86_64-1905-boot.iso"))
+                {
+                    await response.Content.CopyToAsync(fileSave);
+                    fileSave.Close();
+                }
+                Console.WriteLine("{0} byte download", fileSize);
             }
         }
-
         public async Task Test()
         {
             HttpClient client = new HttpClient();

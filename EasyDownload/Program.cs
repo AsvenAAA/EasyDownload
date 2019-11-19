@@ -18,8 +18,8 @@ namespace EasyDownload
 
             Downloader download = new Downloader();
 
-            //await download.DownloadFile();
-            await download.Test();
+            await download.DownloadFile();
+            //await download.Test();
 
             Console.WriteLine("Done");
 
