@@ -24,10 +24,10 @@ namespace EasyDownload
 
         public async Task<HttpResponseMessage> CheckDownloadFile()
         {
-            //HttpClient httpClient = new HttpClient();
-            //Uri uri = new Uri(URI);
-            //HttpResponseMessage response = await httpClient.GetAsync(uri);
-            HttpResponseMessage response = new HttpResponseMessage();
+            HttpClient httpClient = new HttpClient();
+            Uri uri = new Uri(URI);
+            HttpResponseMessage response = await httpClient.GetAsync(uri);
+           // HttpResponseMessage response = new HttpResponseMessage();
             return response?.EnsureSuccessStatusCode();
         }
 
@@ -50,14 +50,34 @@ namespace EasyDownload
 
             using (HttpClient client = new HttpClient())
             {
-                byte[] buffer = new byte[4096];
-                
                 Uri uri = new Uri(URI);
                 HttpResponseMessage response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
                 var fileSize = response.Content.Headers.ContentLength;
-                using (FileStream fileSave = File.Create(@"C:\Users\Asven\Desktop\CentOS-8-x86_64-1905-boot.iso"))
+                //using (FileStream fileSave = File.Create(@"A:\AnyFilesCentOS-8-x86_64-1905-boot.iso"))
+                //{
+                //    await response.Content.CopyToAsync(fileSave);
+                //    fileSave.Close();
+
+                using (FileStream fileSave = new FileStream(@"A:\AnyFilesCentOS-8-x86_64-1905-boot.iso", 
+                                                            FileMode.CreateNew, FileAccess.ReadWrite))
                 {
-                    await response.Content.CopyToAsync(fileSave);
+                    //Глянуть LoadIntoBufferAsync(Int64)
+                    //await response.Content.CopyToAsync(await fileSave.WriteAsync(, bytePointer, test));
+                    byte[] buffer = new byte[4096];
+                    int bytePointer = 0;
+                    int test = (int)fileSize;
+                    int step = 16384;
+                    while(bytePointer < test && test - bytePointer != 0)
+                    {
+                        await fileSave.WriteAsync(response.Content.ReadAsByteArrayAsync().Result, bytePointer, test);
+                        bytePointer += step;
+                        if(test - bytePointer < step)
+                        {
+                            step = test - bytePointer;
+                        }
+                    }
+
+
                     fileSave.Close();
                 }
                 Console.WriteLine("{0} byte download", fileSize);
