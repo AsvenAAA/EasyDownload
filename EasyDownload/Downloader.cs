@@ -12,7 +12,11 @@ namespace EasyDownload
 {
     class Downloader : IDownload
     {
-        public string URI { get; set; } = @"https://mirror.yandex.ru/centos/8.0.1905/isos/x86_64/CentOS-8-x86_64-1905-boot.iso";
+        public string URI { get; set; } = @"https://1.eu.dl.wireshark.org/win64/Wireshark-win64-3.0.7.exe";
+
+        public string PathToTheFile { get; set; } = @"A:\AnyFiles\Wireshark-win64-3.0.7.exe";
+
+        public long totalRead { get; set; }
 
         public DateTime StartTime { get; set; }
 
@@ -53,34 +57,67 @@ namespace EasyDownload
                 Uri uri = new Uri(URI);
                 HttpResponseMessage response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
                 var fileSize = response.Content.Headers.ContentLength;
-                //using (FileStream fileSave = File.Create(@"A:\AnyFilesCentOS-8-x86_64-1905-boot.iso"))
+                //using (FileStream fileSave = File.Create(PathToTheFile))
                 //{
                 //    await response.Content.CopyToAsync(fileSave);
                 //    fileSave.Close();
+                //    fileSave.Dispose();
 
-                using (FileStream fileSave = new FileStream(@"A:\AnyFilesCentOS-8-x86_64-1905-boot.iso", 
-                                                            FileMode.CreateNew, FileAccess.ReadWrite))
+                //****************************************************************************************************************
+                //С помощью FileMode.Append и FileAccess.Write можно дозависывать в файл, но он просто
+                //скачивает все заного, добавляя к существующему
+                using (Stream contentStream = await response.Content.ReadAsStreamAsync(),
+                       fileSave = new FileStream(PathToTheFile, FileMode.Create, FileAccess.ReadWrite,
+                                                 FileShare.ReadWrite, 1048576, true))
                 {
                     //Глянуть LoadIntoBufferAsync(Int64)
                     //await response.Content.CopyToAsync(await fileSave.WriteAsync(, bytePointer, test));
-                    byte[] buffer = new byte[4096];
-                    int bytePointer = 0;
-                    int test = (int)fileSize;
-                    int step = 16384;
-                    while(bytePointer < test && test - bytePointer != 0)
+                    //byte[] buffer = new byte[4096];
+                    //int bytePointer = 0;
+                    //int test = (int)fileSize;
+                    //int step = 16384;
+                    //while (bytePointer < test && test - bytePointer != 0)
+                    //{
+                    //    await fileSave.WriteAsync(response.Content.ReadAsByteArrayAsync().Result, bytePointer, test);
+                    //    bytePointer += step;
+                    //    if (test - bytePointer < step)
+                    //    {
+                    //        step = test - bytePointer;
+                    //    }
+                    //}
+
+
+                    long totalRead = 3194880L;
+                    long currentReads = 0L;
+                    byte[] buffer = new byte[1048576];
+                    var isMoreToRead = true;
+
+                    do
                     {
-                        await fileSave.WriteAsync(response.Content.ReadAsByteArrayAsync().Result, bytePointer, test);
-                        bytePointer += step;
-                        if(test - bytePointer < step)
+                        var read = await contentStream.ReadAsync(buffer, 0, buffer.Length);
+                        if (read == 0)
                         {
-                            step = test - bytePointer;
+                            isMoreToRead = false;
+                        }
+                        else
+                        {
+                            await fileSave.WriteAsync(buffer, 0, read);
+
+                            totalRead += read;
+                            currentReads += 1;
+
+                            if (currentReads % 2000 == 0)
+                            {
+                                Console.WriteLine(string.Format("Download progress: {0}", totalRead));
+                            }
                         }
                     }
-
-
+                    while (isMoreToRead);
                     fileSave.Close();
+                    fileSave.Dispose();
+                    //}
+                    Console.WriteLine("{0} byte download", fileSize);
                 }
-                Console.WriteLine("{0} byte download", fileSize);
             }
         }
         public async Task Test()
