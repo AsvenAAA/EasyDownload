@@ -14,7 +14,7 @@ namespace EasyDownload
     {
         public string URI { get; set; } = @"https://1.eu.dl.wireshark.org/win64/Wireshark-win64-3.0.7.exe";
 
-        public string PathToTheFile { get; set; } = @"A:\AnyFiles\Wireshark-win64-3.0.7.exe";
+        public string PathToTheFile { get; set; } = @"C:\Wireshark-win64-3.0.7.exe";
 
         public long totalRead { get; set; }
 
@@ -87,7 +87,7 @@ namespace EasyDownload
                     //}
 
 
-                    long totalRead = 3194880L;
+                    long totalRead = 0L;
                     long currentReads = 0L;
                     byte[] buffer = new byte[1048576];
                     var isMoreToRead = true;

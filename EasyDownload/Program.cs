@@ -6,25 +6,56 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.IO;
 using System.Collections;
-
+using System.Windows;
+using System.Windows.Controls;
 using System.Diagnostics;
 
 namespace EasyDownload
 {
-    class Program
+    class Program : Application
     {
-        static async Task Main()
+        [STAThread]
+        //async Task
+        static void Main()
         {
 
-            Downloader download = new Downloader();
+            //Downloader download = new Downloader();
 
-            await download.DownloadFile();
+            //await download.DownloadFile();
             //await download.Test();
 
-            Console.WriteLine("Done");
+            //Console.WriteLine("Done");
 
-            Console.ReadKey();
+            // Console.ReadKey();
+
+
+            Program app = new Program();
+            app.Startup += new StartupEventHandler(AppStartAp);
+            app.Exit += new ExitEventHandler(AppExit);
+            app.Run();
         }
+
+        static void AppExit(object sender, ExitEventArgs e)
+        {
+            MessageBox.Show("App has exited!");
+        }
+
+        static void AppStartAp(object sender, StartupEventArgs e)
+        {
+            Application.Current.Properties["GodMode"] = false;
+            foreach(string arg in e.Args)
+            {
+                if(arg.ToLower() == "/godmode")
+                {
+                    Application.Current.Properties["GodMode"] = true;
+                    break;
+                }
+            }
+            MainWindow mainWindow = new MainWindow("TestApp!", 400, 500);
+            mainWindow.Show();
+        }
+
+
     }
 
 }
