@@ -14,7 +14,7 @@ namespace EasyDownload
 {
     class Program : Application
     {
-        [STAThread]
+       // [STAThread]
         //async Task
         static void Main()
         {
@@ -29,31 +29,31 @@ namespace EasyDownload
             // Console.ReadKey();
 
 
-            Program app = new Program();
-            app.Startup += new StartupEventHandler(AppStartAp);
-            app.Exit += new ExitEventHandler(AppExit);
-            app.Run();
+            //Program app = new Program();
+            //app.Startup += new StartupEventHandler(AppStartAp);
+            //app.Exit += new ExitEventHandler(AppExit);
+            //app.Run();
         }
 
-        static void AppExit(object sender, ExitEventArgs e)
-        {
-            MessageBox.Show("App has exited!");
-        }
+        //static void AppExit(object sender, ExitEventArgs e)
+        //{
+        //    MessageBox.Show("App has exited!");
+        //}
 
-        static void AppStartAp(object sender, StartupEventArgs e)
-        {
-            Application.Current.Properties["GodMode"] = false;
-            foreach(string arg in e.Args)
-            {
-                if(arg.ToLower() == "/godmode")
-                {
-                    Application.Current.Properties["GodMode"] = true;
-                    break;
-                }
-            }
-            MainWindow mainWindow = new MainWindow("TestApp!", 400, 500);
-            mainWindow.Show();
-        }
+        //static void AppStartAp(object sender, StartupEventArgs e)
+        //{
+        //    Application.Current.Properties["GodMode"] = false;
+        //    foreach(string arg in e.Args)
+        //    {
+        //        if(arg.ToLower() == "/godmode")
+        //        {
+        //            Application.Current.Properties["GodMode"] = true;
+        //            break;
+        //        }
+        //    }
+        //    MainWindow mainWindow = new MainWindow("TestApp!", 400, 500);
+        //    mainWindow.Show();
+        //}
 
 
     }
