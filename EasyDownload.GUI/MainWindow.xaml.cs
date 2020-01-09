@@ -24,7 +24,7 @@ namespace EasyDownload.GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string _filePath;
+        //private string _filePath;
         public MainWindow()
         {
             InitializeComponent();
@@ -55,8 +55,8 @@ namespace EasyDownload.GUI
             //    textEditor.Text = fileDialog.FileName;
             //}
 
-            DirectoryManager manageDir = new DirectoryManager();
-            textEditor.Text = manageDir.GetDirectories();
+            //DirectoryManager manageDir = new DirectoryManager();
+            //textEditor.Text = manageDir.GetDirectories();
         }
 
         private void HistoryButtonClick(object sender, RoutedEventArgs e)
